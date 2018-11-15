@@ -1,3 +1,7 @@
+clc;
+clear;
+close all;
+
 addpath('functions');
 %pkg load communications
 
