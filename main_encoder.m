@@ -47,6 +47,20 @@ split_result = band_split(smues, N, levels);
 %Plot split bands
 for i = 1:size(split_result, 1)
     figure();
-    stem(0:((fmuestreo/levels)-1), abs(fft(split_result(i,N+1:end), (fmuestreo/levels))));
+    stem(0:((fmuestreo/2^levels)-1), abs(fft(split_result(i,N+1:end), (fmuestreo/2^levels))));
     title(sprintf('Espectro de banda %d', i))
 end
+
+% figure();
+% stem(0:((fmuestreo/2^levels)-1), abs(fft(split_result(1,N+1:end), (fmuestreo/2^levels))));
+% title(sprintf('Espectro de banda %d', 1))
+%
+%
+% low_filter = fir1(N, 1/2);
+% low_band = zeros(1, 2*size(split_result,2));
+% low_band(1:2:end) = split_result(1,:);
+% low_band = filter(low_filter, 1, low_band);
+%
+% figure();
+% stem(0:(fmuestreo/2-1), abs(fft(low_band, fmuestreo/2)));
+% title(sprintf('Espectro señal muestreada a %d Hz', fmuestreo/2));
