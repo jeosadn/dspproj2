@@ -14,5 +14,6 @@ function result = band_split(original_signal, N, levels)
         high_band(2:2:end) = high_band(2:2:end) .* -1;
         high_band = high_band .* 2;
         high_band = band_split(high_band, N, levels-1);
+
         result = [low_band; high_band];
     end
