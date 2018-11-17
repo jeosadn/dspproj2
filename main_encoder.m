@@ -13,9 +13,11 @@ fprintf('Encoder parsed parameters\n');
 %CODER
 fprintf('Starting encode.\n');
 tic;
-encoder(char(audio_input_filename), char(audio_output_filename));
+encoder(char(audio_input_filename), char(audio_output_filename), 60);
 fprintf('Coding time:\n');
 toc;
+
+return;
 
 %
 %Band splitter
