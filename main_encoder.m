@@ -22,10 +22,10 @@ toc;
 %
 
 %Create sample input
-fmuestreo = 88;
+levels = 2;
+fmuestreo = 44*levels;
 tmax = 10;
 N = 60;
-div = 2;
 
 fsenal = [1 2 3  14 15 16  25 26 27  36 37 38];
 asenal = [1 3 5   7 11  9  17 15 13  21 19 23];
@@ -42,11 +42,11 @@ stem(0:(fmuestreo-1), abs(fft(smues, fmuestreo)));
 title(sprintf('Espectro señal muestreada a %d Hz', fmuestreo));
 
 %Split in bands
-split_result = band_split(smues, N, 2);
+split_result = band_split(smues, N, levels);
 
 %Plot split bands
 for i = 1:size(split_result, 1)
     figure();
-    stem(0:(fmuestreo-1), abs(fft(split_result(i,N+1:end), fmuestreo)));
+    stem(0:((fmuestreo/levels)-1), abs(fft(split_result(i,N+1:end), (fmuestreo/levels))));
     title(sprintf('Espectro de banda %d', i))
 end

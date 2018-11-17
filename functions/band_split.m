@@ -1,6 +1,6 @@
 function result = band_split(original_signal, N, levels)
     if levels == 0;
-        result = original_signal;
+        result = original_signal .* 2;
     else
         low_filter = fir1(N, 1/2);
         low_band = filter(low_filter, 1, original_signal);
