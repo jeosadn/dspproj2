@@ -22,18 +22,19 @@ toc;
 %
 
 %Create sample input
-levels = 2;
-fmuestreo = 88;
-tmax = 10;
-N = 60;
+levels = 3;
+N = 60*levels;
+mul = 10;
+fmuestreo = mul*2^levels;
+tmax = 2^levels*N;
 
-fsenal = [1 2 3  14 15 16  25 26 27  36 37 38];
-asenal = [1 3 5   7 11  9  17 15 13  21 19 23];
 
 tvecmues = 0:1/fmuestreo:tmax-(1/fmuestreo);
 smues = zeros(1, length(tvecmues));
-for i = 1:length(fsenal)
-    smues = smues + asenal(i)*cos(2*pi*fsenal(i).*tvecmues);
+for i = 1:fmuestreo/2-1
+    if mod(i, mul/2) ~= 0
+        smues = smues + i*cos(2*pi*i.*tvecmues);
+    end
 end
 
 %Plot sample input
