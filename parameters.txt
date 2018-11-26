@@ -1,2 +1,2 @@
-audio_input_filename = ./wavs/sweep.wav
+audio_input_filename = ./wavs/voice.wav
 audio_output_filename = ./wavs/encoded.wav
