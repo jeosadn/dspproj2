@@ -80,14 +80,14 @@ function encoder(audio_input_filename, audio_output_filename, N)
             if dataS(i,j) == 1
                 s = -1;
             end
-            split_result(i,j) = s*data(i,j);
+            compand_result(i,j) = s*data(i,j);
         end
     end
 
     %Reverse compansion
     for i = 1:2^levels
-        compand_mag(i) = max(split_result(i,:));
-        split_result(i,:) = compand(split_result(i,:), compand_factor, compand_mag(i), 'mu/expander');
+        compand_mag(i) = max(compand_result(i,:));
+        split_result(i,:) = compand(compand_result(i,:), compand_factor, compand_mag(i), 'mu/expander');
     end
 
     %Rejoin bands
