@@ -11,6 +11,9 @@ function encoder(audio_input_filename, audio_output_filename, N)
     %Input characteristics:
     % 16 bit per sample, at 44100 Hz, in stereo
     [sampleData, sampleFrequency] = audioread(audio_input_filename);
+    if mod(length(sampleData), 2^levels) ~= 0;
+        sampleData(end+1:end+2^levels-mod(end, 2^levels)) = 0;
+    end
     
     %Plot sample input
     figure();
