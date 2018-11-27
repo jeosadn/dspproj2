@@ -1,10 +1,65 @@
-function decoder(audio_output_filename)
+function decoder(audio_output_filename, N)
+    %N is the # of filter coefficients
+    %Variables that must be handled
+    levels = 2; %This can be dynamic
+    compand_factor = 256; %This is a parameter for the encoder, saved in file for decoder
+    sampleFrequency = 8000;
+    
     %--------------------------------------------------------------------------
-    % Read audio File
+    %Read bands and paramaters from binary file
     %--------------------------------------------------------------------------
-    %Input characteristics:
-    % 16 bit per sample, at 44100 Hz, in stereo
-    [sampleData, sampleFrequency] = audioread(audio_output_filename);
+    binDataMax = read_file('bin/dataMax.bin');
+    binData1 = read_file('bin/data1.bin');
+    binData2 = read_file('bin/data2.bin');
+    binData3 = read_file('bin/data3.bin');
+    binData4 = read_file('bin/data4.bin');
+    
+    numBitsMax = 16;
+    numBits = [8 8 4 2];
+    maxBits = [2^(numBits(1)-1) 2^(numBits(2)-1) 2^(numBits(3)-1) 2^(numBits(4)-1)];
+    sizeResult = round(size(binData1,1)*8/(numBits(1)+1));
+    
+    [Max,] = bin_to_int(numBitsMax, 4, binDataMax.', 0);
+    [data(1,:),dataS(1,:)] = bin_to_int(numBits(1), sizeResult, binData1.', 1);    
+    [data(2,:),dataS(2,:)] = bin_to_int(numBits(2), sizeResult, binData2.', 1);    
+    [data(3,:),dataS(3,:)] = bin_to_int(numBits(3), sizeResult, binData3.', 1);    
+    [data(4,:),dataS(4,:)] = bin_to_int(numBits(4), sizeResult, binData4.', 1);     
+    
+    
+    %--------------------------------------------------------------------------
+    % Decoding Job
+    %--------------------------------------------------------------------------
+    split_result = zeros(2^levels,sizeResult);
+    %Dequantize
+    for i = 1:2^levels        
+        for j = 1:sizeResult
+            if dataS(i,j) == 1
+                split_result(i,j) = -1*data(i,j)*Max(1,i)/maxBits(i);
+            else
+                split_result(i,j) = data(i,j)*Max(1,i)/maxBits(i);
+            end
+        end
+    end
 
-    fprintf('Decoded\n');
+    %Reverse compansion
+    for i = 1:2^levels
+        compand_mag(i) = max(split_result(i,:));
+        split_result(i,:) = compand(split_result(i,:), compand_factor, compand_mag(i), 'mu/expander');
+    end
+
+    %Rejoin bands
+    join_result = band_join(split_result, N);
+
+    %Plot joined bands
+    figure();
+    stem(0:(sampleFrequency-1), abs(fft(join_result(N*2^levels+1:end), sampleFrequency)));
+    title(sprintf('Espectro de bandas unidas'));
+
+    
+    %--------------------------------------------------------------------------
+    % Write audio file
+    %--------------------------------------------------------------------------
+    %Output characteristics:
+    % 16 bit per sample, at 8000 Hz, in stereo
+    audiowrite(audio_output_filename, join_result, sampleFrequency);
 end

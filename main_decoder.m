@@ -13,6 +13,6 @@ fprintf('Decoder parsed parameters\n');
 %DECODER
 fprintf('Starting decode.\n');
 tic;
-decoder(char(audio_output_filename));
-fprintf('Decoding time:\n');
+decoder(char(audio_output_filename), 256);
+fprintf('Coding time:\n');
 toc;
