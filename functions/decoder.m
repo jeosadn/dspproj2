@@ -1,29 +1,36 @@
-function decoder(audio_output_filename, N)
+function decoder(audio_output_filename, N, numBitsMax)
     %N is the # of filter coefficients
     %Variables that must be handled
     levels = 2; %This can be dynamic
     compand_factor = 256; %This is a parameter for the encoder, saved in file for decoder
-    sampleFrequency = 8000;
+    sampleFrequency = 8000; %Sample Frequency
     
     %--------------------------------------------------------------------------
     %Read bands and paramaters from binary file
     %--------------------------------------------------------------------------
     binDataMax = read_file('bin/dataMax.bin');
+    binDataW1 = read_file('bin/dataW1.bin');
+    binDataW2 = read_file('bin/dataW2.bin');
+    binDataW3 = read_file('bin/dataW3.bin');
+    binDataW4 = read_file('bin/dataW4.bin');
     binData1 = read_file('bin/data1.bin');
     binData2 = read_file('bin/data2.bin');
     binData3 = read_file('bin/data3.bin');
     binData4 = read_file('bin/data4.bin');
     
-    numBitsMax = 16;
-    numBits = [8 8 4 2];
-    maxBits = [2^(numBits(1)-1) 2^(numBits(2)-1) 2^(numBits(3)-1) 2^(numBits(4)-1)];
-    sizeResult = round(size(binData1,1)*8/(numBits(1)+1));
-    
     [Max,] = bin_to_int(numBitsMax, 4, binDataMax.', 0);
+    [numBits(1),] = bin_to_int(8, 1, binDataW1.', 0);
+    [numBits(2),] = bin_to_int(8, 1, binDataW2.', 0);
+    [numBits(3),] = bin_to_int(8, 1, binDataW3.', 0);
+    [numBits(4),] = bin_to_int(8, 1, binDataW4.', 0);
+    
+    sizeResult = round(size(binData1,1)*8/(numBits(1)+1));
+    maxBits = [2^(numBits(1)-1) 2^(numBits(2)-1) 2^(numBits(3)-1) 2^(numBits(4)-1)];
+    
     [data(1,:),dataS(1,:)] = bin_to_int(numBits(1), sizeResult, binData1.', 1);    
     [data(2,:),dataS(2,:)] = bin_to_int(numBits(2), sizeResult, binData2.', 1);    
     [data(3,:),dataS(3,:)] = bin_to_int(numBits(3), sizeResult, binData3.', 1);    
-    [data(4,:),dataS(4,:)] = bin_to_int(numBits(4), sizeResult, binData4.', 1);     
+    [data(4,:),dataS(4,:)] = bin_to_int(numBits(4), sizeResult, binData4.', 1);
     
     
     %--------------------------------------------------------------------------

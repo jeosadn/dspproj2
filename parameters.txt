@@ -1,2 +1,7 @@
 audio_input_filename = ./wavs/voice.wav
 audio_output_filename = ./wavs/encoded.wav
+num_bits_w1 = 8
+num_bits_w2 = 8
+num_bits_w3 = 4
+num_bits_w4 = 2
+num_bits_max = 16
