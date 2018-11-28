@@ -76,22 +76,13 @@ function encoder(audio_input_filename, N, numBits, numBitsMax)
     binDataW2   = int_to_bin(8, 1, numBits(2), 0, 0);
     binDataW3   = int_to_bin(8, 1, numBits(3), 0, 0);
     binDataW4   = int_to_bin(8, 1, numBits(4), 0, 0);
+    binDataSize = int_to_bin(32, 1, sizeResult, 0, 0);
     binData1    = int_to_bin(numBits(1), sizeResult, data(1,:), dataS(1,:), 1);    
     binData2    = int_to_bin(numBits(2), sizeResult, data(2,:), dataS(2,:), 1);    
     binData3    = int_to_bin(numBits(3), sizeResult, data(3,:), dataS(3,:), 1);    
     binData4    = int_to_bin(numBits(4), sizeResult, data(4,:), dataS(4,:), 1);    
  
-    binData = [binDataMax binDataW1 binDataW2 binDataW3 binDataW4 binData1 binData2 binData3 binData4];
+    binData = [binDataMax binDataW1 binDataW2 binDataW3 binDataW4 binDataSize binData1 binData2 binData3 binData4];
     write_file('bin/data.bin',binData);
     
-    write_file('bin/dataMax.bin', binDataMax);
-    write_file('bin/dataW1.bin', binDataW1);
-    write_file('bin/dataW2.bin', binDataW2);
-    write_file('bin/dataW3.bin', binDataW3);
-    write_file('bin/dataW4.bin', binDataW4);
-    write_file('bin/data1.bin', binData1);
-    write_file('bin/data2.bin', binData2);
-    write_file('bin/data3.bin', binData3);
-    write_file('bin/data4.bin', binData4);
-     
 end

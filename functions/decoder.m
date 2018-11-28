@@ -8,31 +8,60 @@ function decoder(audio_output_filename, N, numBitsMax)
     %--------------------------------------------------------------------------
     %Read bands and paramaters from binary file
     %--------------------------------------------------------------------------
-    binDataMax = read_file('bin/dataMax.bin');
-    binDataW1 = read_file('bin/dataW1.bin');
-    binDataW2 = read_file('bin/dataW2.bin');
-    binDataW3 = read_file('bin/dataW3.bin');
-    binDataW4 = read_file('bin/dataW4.bin');
-    binData1 = read_file('bin/data1.bin');
-    binData2 = read_file('bin/data2.bin');
-    binData3 = read_file('bin/data3.bin');
-    binData4 = read_file('bin/data4.bin');
+    binData = read_file('bin/data.bin');
     
+    startI = 1;
+    endI = (uint32(ceil(numBitsMax/8))*4)+1;
+    binDataMax = binData(startI:endI);
     [Max,] = bin_to_int(numBitsMax, 4, binDataMax.', 0);
+    
+    startI = endI + 1;
+    endI = startI + 1;
+    binDataW1 = binData(startI:endI);
     [numBits(1),] = bin_to_int(8, 1, binDataW1.', 0);
-    [numBits(2),] = bin_to_int(8, 1, binDataW2.', 0);
-    [numBits(3),] = bin_to_int(8, 1, binDataW3.', 0);
-    [numBits(4),] = bin_to_int(8, 1, binDataW4.', 0);
     
-    sizeResult = round(size(binData1,1)*8/(numBits(1)+1));
-    maxBits = [2^(numBits(1)-1) 2^(numBits(2)-1) 2^(numBits(3)-1) 2^(numBits(4)-1)];
+    startI = endI + 1;
+    endI = startI + 1;
+    binDataW2 = binData(startI:endI);
+    [numBits(2),] = bin_to_int(8, 1, binDataW2.', 0);    
     
-    [data(1,:),dataS(1,:)] = bin_to_int(numBits(1), sizeResult, binData1.', 1);    
-    [data(2,:),dataS(2,:)] = bin_to_int(numBits(2), sizeResult, binData2.', 1);    
-    [data(3,:),dataS(3,:)] = bin_to_int(numBits(3), sizeResult, binData3.', 1);    
+    startI = endI + 1;
+    endI = startI + 1;
+    binDataW3 = binData(startI:endI);
+    [numBits(3),] = bin_to_int(8, 1, binDataW3.', 0);    
+    
+    startI = endI + 1;
+    endI = startI + 1;
+    binDataW4 = binData(startI:endI);
+    [numBits(4),] = bin_to_int(8, 1, binDataW4.', 0);    
+    
+    startI = endI + 1;
+    endI = startI + 4;
+    binDataSize = binData(startI:endI);
+    [sizeResult,] = bin_to_int(32, 1, binDataSize.', 0);
+    
+    startI = endI + 1;
+    endI = startI + ceil((sizeResult*(numBits(1)+1))/8) - 1;
+    binData1 = binData(startI:endI);
+    [data(1,:),dataS(1,:)] = bin_to_int(numBits(1), sizeResult, binData1.', 1); 
+    
+    startI = endI + 1;
+    endI = startI + ceil((sizeResult*(numBits(2)+1))/8) - 1;
+    binData2 = binData(startI:endI);
+    [data(2,:),dataS(2,:)] = bin_to_int(numBits(2), sizeResult, binData2.', 1);
+    
+    startI = endI + 1;
+    endI = startI + ceil((sizeResult*(numBits(3)+1))/8) - 1;
+    binData3 = binData(startI:endI);
+    [data(3,:),dataS(3,:)] = bin_to_int(numBits(3), sizeResult, binData3.', 1);  
+    
+    startI = endI + 1;
+    endI = startI + ceil((sizeResult*(numBits(4)+1))/8) - 1;
+    binData4 = binData(startI:endI);
     [data(4,:),dataS(4,:)] = bin_to_int(numBits(4), sizeResult, binData4.', 1);
     
-    
+    maxBits = [2^(numBits(1)-1) 2^(numBits(2)-1) 2^(numBits(3)-1) 2^(numBits(4)-1)];
+        
     %--------------------------------------------------------------------------
     % Decoding Job
     %--------------------------------------------------------------------------
