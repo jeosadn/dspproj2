@@ -1,4 +1,4 @@
 audio_input_filename = ./wavs/voice.wav
-audio_output_filename = ./wavs/good_quality.wav
-configuration = compression
+audio_output_filename = ./wavs/result.wav
+configuration = quality
 num_bits_max = 16

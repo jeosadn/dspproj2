@@ -1,9 +1,9 @@
 function decoder(audio_output_filename, N, numBitsMax)
     %N is the # of filter coefficients
     %Variables that must be handled
-    levels = 2; %This can be dynamic
-    compand_factor = 256; %This is a parameter for the encoder, saved in file for decoder
-    sampleFrequency = 8000; %Sample Frequency
+    levels = 2;
+    %compand_factor = 256; %This is a parameter for the encoder, saved in file for decoder
+    sampleFrequency = 8000;
     
     %--------------------------------------------------------------------------
     %Read bands and paramaters from binary file
@@ -11,7 +11,12 @@ function decoder(audio_output_filename, N, numBitsMax)
     binData = read_file('bin/data.bin');
     
     startI = 1;
-    endI = (uint32(ceil(numBitsMax/8))*4)+1;
+    endI = startI + 1;
+    binCoefMu = binData(startI:endI);
+    [compand_factor,] = bin_to_int(16, 1, binCoefMu.', 0);
+    
+    startI = endI + 1;
+    endI = startI + (uint32(ceil(numBitsMax/8))*4)+1;
     binDataMax = binData(startI:endI);
     [Max,] = bin_to_int(numBitsMax, 4, binDataMax.', 0);
     
