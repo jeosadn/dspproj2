@@ -9,14 +9,9 @@ function decoder(audio_output_filename, N, numBitsMax)
     %Read bands and paramaters from binary file
     %--------------------------------------------------------------------------
     binData = read_file('bin/data.bin');
-    
+     
     startI = 1;
-    endI = startI + 1;
-    binCoefMu = binData(startI:endI);
-    [compand_factor,] = bin_to_int(16, 1, binCoefMu.', 0);
-    
-    startI = endI + 1;
-    endI = startI + (uint32(ceil(numBitsMax/8))*4)+1;
+    endI = startI + (uint32(ceil(numBitsMax/8))*4);
     binDataMax = binData(startI:endI);
     [Max,] = bin_to_int(numBitsMax, 4, binDataMax.', 0);
     
@@ -64,6 +59,11 @@ function decoder(audio_output_filename, N, numBitsMax)
     endI = startI + ceil((sizeResult*(numBits(4)+1))/8) - 1;
     binData4 = binData(startI:endI);
     [data(4,:),dataS(4,:)] = bin_to_int(numBits(4), sizeResult, binData4.', 1);
+    
+    startI = endI + 1;
+    endI = startI + 1;
+    binCoefMu = binData(startI:endI);
+    [compand_factor,] = bin_to_int(16, 1, binCoefMu.', 0);
     
     maxBits = [2^(numBits(1)-1) 2^(numBits(2)-1) 2^(numBits(3)-1) 2^(numBits(4)-1)];
         

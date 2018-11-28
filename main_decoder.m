@@ -3,7 +3,7 @@ clear;
 close all;
 
 addpath('functions');
-%pkg load communications
+pkg load communications
 
 %PARSING Parameters
 audio_input_filename = read_parameters('parameters.txt','audio_input_filename');

@@ -71,7 +71,6 @@ function encoder(audio_input_filename, N, numBits, numBitsMax)
     %--------------------------------------------------------------------------
     %Save bands and parameteres to binary file
     %--------------------------------------------------------------------------
-    binCoefMu   = int_to_bin(16, 1, compand_factor, 0, 0);
     binDataMax  = int_to_bin(numBitsMax, 4, Max(1,:), 0, 0);
     binDataW1   = int_to_bin(8, 1, numBits(1), 0, 0);
     binDataW2   = int_to_bin(8, 1, numBits(2), 0, 0);
@@ -82,8 +81,9 @@ function encoder(audio_input_filename, N, numBits, numBitsMax)
     binData2    = int_to_bin(numBits(2), sizeResult, data(2,:), dataS(2,:), 1);    
     binData3    = int_to_bin(numBits(3), sizeResult, data(3,:), dataS(3,:), 1);    
     binData4    = int_to_bin(numBits(4), sizeResult, data(4,:), dataS(4,:), 1);    
- 
-    binData = [binCoefMu binDataMax binDataW1 binDataW2 binDataW3 binDataW4 binDataSize binData1 binData2 binData3 binData4];
+    binCoefMu   = int_to_bin(16, 1, compand_factor, 0, 0);
+     
+    binData = [binDataMax binDataW1 binDataW2 binDataW3 binDataW4 binDataSize binData1 binData2 binData3 binData4 binCoefMu];
     write_file('bin/data.bin',binData);
     
 end

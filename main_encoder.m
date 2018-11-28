@@ -3,7 +3,7 @@ clear;
 close all;
 
 addpath('functions');
-%pkg load communications
+pkg load communications
 
 numBits = zeros(1,4);
 
